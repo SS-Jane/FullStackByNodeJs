@@ -4,12 +4,14 @@ const app = express();
 const bodyParser = require("body-parser");
 //API add data to table
 const { PrismaClient } = require ("@prisma/client");
-const { log } = require("console");
+// const { log, error } = require("console");
 
 const prisma = new PrismaClient();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
+
+console.log("Server runing");
 
 app.get("/", (req, res) => {
     res.send("Hello by express\n");
@@ -246,5 +248,27 @@ app.get("/book/between", async (req, res) => {
     }
 })
 
+app.get("/book/sum", async (req, res) => {
+    try {
+        const data = await prisma.book.aggregate({
+            _sum: {
+                price: true
+            }
+        })
+        res.send({ results : data})
+    } catch (e) {
+        res.status(500).send({ error : e.message})
+    }
+})
+
+
+// return await prisma.journalTransactions.findMany({
+//     where: {
+//         date: {
+//             lte : new Date("2022-01-30"),
+//             gel : new Date("2022-01-15"),
+//         },
+//     },
+// });
 
 app.listen(3001);
