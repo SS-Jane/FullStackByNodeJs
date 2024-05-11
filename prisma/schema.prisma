@@ -14,9 +14,10 @@ datasource db {
 }
 
 model Book {
-  id    Int     @id() @default(autoincrement())
-  isbn  String
-  name  String
-  price Int
-  detail String? //can receiv null
+  id              Int     @id() @default(autoincrement())
+  isbn            String
+  name            String
+  price           Int
+  detail          String? //can receiv null
+  registerDate    DateTime?
 }

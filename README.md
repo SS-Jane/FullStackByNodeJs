@@ -3,4 +3,5 @@
 - NodeJS
 - Prisma
 - Express
+- JWT
   
