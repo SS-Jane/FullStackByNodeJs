@@ -25,9 +25,17 @@ function checkSignIn(req, res, next) {
             next();
         }
     } catch (e) {
-        con
+        res.status(500).send({ error : e.message })
     }
 }
+
+app.get("/user/info", checkSignIn, (req, res, next) => {
+    try {
+        res.send("hello back office user info");
+    } catch (e) {
+        res.status(500).send({ error : e.message })
+    }
+})
 
 console.log("Server runing");
 
@@ -375,7 +383,7 @@ app.get("/user/createToken", (req, res) => {
         }
         const token = jwt.sign(payload, secret, { expiresIn : "1d" });
 
-        res.send({ token: token });
+        res.send({ token : token });
     } catch (e) {
         res.status(500).send({ error : e.message })
     }
@@ -384,10 +392,53 @@ app.get("/user/createToken", (req, res) => {
 app.get("/user/verifyToken", (req, res) => {
     try {
         const secret = process.env.TOKEN_SECRET;
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJuYW1lIjoiU3VwZXJKYW5lIiwibGV2ZWwiOiJhZG1pbiIsImlhdCI6MTcxNTQyMDM4MiwiZXhwIjoxNzE1NTA2NzgyfQ.XVyHoNsS1q9meuNzkMzGrDXO9XtTXRbRz7XN32coVn4";
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJuYW1lIjoiU3VwZXJKYW5lIiwibGV2ZWwiOiJhZG1pbiIsImlhdCI6MTcxNTQ5ODczOCwiZXhwIjoxNzE1NTg1MTM4fQ.3AmZ7J7gJGm253wenprH2WPUrz5mPdiOYrVh5VsmN1U";
         const result = jwt.verify(token, secret);
 
         res.send({ result : result });
+    } catch (e) {
+        res.status(500).send({ error : e.message })
+    }
+})
+
+app.get("/oneToOne", async (req, res) => {
+    try {
+        const data = await prisma.orderDetail.findMany({
+            include : {
+                book : true
+            }
+        })
+        res.send({ results : data })
+    } catch (e) {
+        res.status(500).send({ error : e.message })
+    }
+})
+
+app.get("/oneToMany", async (req, res) => {
+    try {
+        const data = await prisma.book.findMany({
+            include : {
+                OrderDetail : true
+            }
+        })
+        res.send({ results : data })
+    } catch (e) {
+        res.status(500).send({ error : e.message })
+    }
+})
+
+app.get("/multiModel", async (req, res) => {
+    try {
+        const data = await prisma.customer.findMany({
+            include: {
+                Order : {
+                    include : {
+                        OrderDetail : true
+                    }
+                }
+            }
+        })
+        res.send({ results : data })
     } catch (e) {
         res.status(500).send({ error : e.message })
     }

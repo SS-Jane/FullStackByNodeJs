@@ -14,10 +14,36 @@ datasource db {
 }
 
 model Book {
-  id              Int     @id() @default(autoincrement())
-  isbn            String
-  name            String
-  price           Int
-  detail          String? //can receiv null
-  registerDate    DateTime?
+  id           Int           @id() @default(autoincrement())
+  isbn         String
+  name         String
+  price        Int
+  detail       String? //can receiv null
+  registerDate DateTime?
+  OrderDetail  OrderDetail[]
+}
+
+model Customer {
+  id      Int     @id() @default(autoincrement())
+  name    String
+  phone   String
+  address String
+  Order   Order[]
+}
+
+model Order {
+  id          Int           @id() @default(autoincrement())
+  orderDate   DateTime
+  payDate     DateTime?
+  customerId  Int
+  customer    Customer      @relation(fields: [customerId], references: [id])
+  OrderDetail OrderDetail[]
+}
+
+model OrderDetail {
+  id      Int   @id() @default(autoincrement())
+  orderId Int
+  Order   Order @relation(fields: [orderId], references: [id])
+  bookId  Int
+  book    Book  @relation(fields: [bookId], references: [id])
 }
