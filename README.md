@@ -4,4 +4,9 @@
 - Prisma
 - Express
 - JWT
+- React
+- React Router
+- FontAwesome : https://cdnjs.com/libraries/font-awesome (Icon)
+- CDN Connection : https://cdnjs.com/libraries/font-awesome (Icon css)
   
+- Bootstrap CSS Framework
