@@ -1,7 +1,9 @@
 // const { useEffect, useState } = require("react");
+import axios from "axios";
 import "./hello.css"
 import MyComponent from "./components/MyComponent"
 const { useState } = require("react")
+const dayjs = require("dayjs")
 
 function Hello() {
     // const [product, setProduct] = useState(["SuperJane!!", "carol", "staberry", "coconut", "mango"]);
@@ -40,7 +42,28 @@ function Hello() {
     const handleSignIn = () => {
         console.log(user);
     }
-
+// numberFormat
+    const [income, setIncome] = useState(10000);
+//DateTimeFormat
+    const [payDate, setPayDate] = useState(new Date());
+// API axios GET method
+    const getMethod = async () => {
+        try {
+            await axios.get('http://localhost:3001/book/orderBy');
+        } catch (e) {
+            console.log(e);
+        }
+    } 
+// API axios POST method
+    const postMethod = async () => {
+        try {
+            await axios.post('http://localhost:3001/book/search', {
+                keyword: "J"
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
     return <>
         {/* {product.length > 0 ? <div>Have data!!</div> : <div>No data</div>} */}
         {/* {product.map(item =>
@@ -76,6 +99,26 @@ function Hello() {
             </div>
             <button className="btn btn-primary mt-3" onClick={handleSignIn}>
                 <i className="fa fa-check me-2"></i>Sign In
+            </button>
+        </div>
+{/* numberFormat */}
+        <div>
+            {income.toLocaleString("th-TH")}
+        </div>
+{/* DateTimeFormate */}
+        <div>
+            {dayjs(payDate).format("DD/MM/YYYYY")}
+        </div>
+{/* API axios GET Method */}
+        <div>
+            <button className="btn btn-primary" onClick={getMethod}>
+                Call API GET Method
+            </button>
+        </div>
+{/* API axios POST Method */}
+        <div>
+            <button className="btn btn-primary" onClick={postMethod}>
+                Call API Post Method
             </button>
         </div>
     </>

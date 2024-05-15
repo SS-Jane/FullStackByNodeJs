@@ -574,7 +574,8 @@ app.get("/readExcel", async (req, res) => {
 })
 
 //Enable CORS : npm i cors
-
+    const cors = require("cors");
+    app.use(cors());
 // return await prisma.journalTransactions.findMany({
 //     where: {
 //         date: {
