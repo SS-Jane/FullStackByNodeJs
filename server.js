@@ -11,7 +11,11 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
+//Enable CORS : npm i cors
+const cors = require('cors');
+app.use(cors());
 
+    
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 //middle ware
@@ -127,10 +131,9 @@ app.put("/book/updateManual/:id", async (req, res) => {
     try {
         await prisma.book.update({
             data: {
-                // isbn : "50550",
-                // name : "Jane5 update",
-                // price : 95599
-                registerDate : "2024-05-09"
+                isbn : "66666",
+                name : "Jane10 update",
+                price : 95599
             },
             where: {
                 id: parseInt(req.params.id)
@@ -145,6 +148,20 @@ app.put("/book/updateManual/:id", async (req, res) => {
 app.delete("/book/remove/:id", async (req, res) => {
     try {
         await prisma.book.delete({
+            where: {
+                id: parseInt(req.params.id)
+            }
+        })
+
+        res.send({ message: "success"})
+    } catch (e) {
+        res.status(500).send({ error : e.message })
+    }
+})
+
+app.delete("/orderDetail/remove/:id", async (req, res) => {
+    try {
+        await prisma.orderDetail.delete({
             where: {
                 id: parseInt(req.params.id)
             }
@@ -400,7 +417,7 @@ app.get("/user/createToken", (req, res) => {
 app.get("/user/verifyToken", (req, res) => {
     try {
         const secret = process.env.TOKEN_SECRET;
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJuYW1lIjoiU3VwZXJKYW5lIiwibGV2ZWwiOiJhZG1pbiIsImlhdCI6MTcxNTQ5ODczOCwiZXhwIjoxNzE1NTg1MTM4fQ.3AmZ7J7gJGm253wenprH2WPUrz5mPdiOYrVh5VsmN1U";
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTAwLCJuYW1lIjoiU3VwZXJKYW5lIiwibGV2ZWwiOiJhZG1pbiIsImlhdCI6MTcxNjAwMzYwMywiZXhwIjoxNzE2MDkwMDAzfQ.RUcH8WzLGzGr1hMnQtpqeCFtuzpoPLutYlzrMok3rFU";
         const result = jwt.verify(token, secret);
 
         res.send({ result : result });
@@ -573,9 +590,7 @@ app.get("/readExcel", async (req, res) => {
     }
 })
 
-//Enable CORS : npm i cors
-    const cors = require("cors");
-    app.use(cors());
+
 // return await prisma.journalTransactions.findMany({
 //     where: {
 //         date: {
